@@ -362,6 +362,15 @@ QtGLVideoItem::onSceneGraphInitialized ()
 }
 
 void
+QtGLVideoItem::onBeforeSynchronizing ()
+{
+  if (!this->priv->qt_context) {
+    GST_DEBUG("%p scene graph beforeSynchronizing", this);
+    onSceneGraphInitialized();
+  }
+}
+
+void
 QtGLVideoItem::onSceneGraphInvalidated ()
 {
   GST_FIXME ("%p scene graph invalidated", this);
@@ -413,11 +422,7 @@ void
 QtGLVideoItem::handleWindowChanged(QQuickWindow *win)
 {
   if (win) {
-    if (win->isSceneGraphInitialized())
-      onSceneGraphInitialized();
-    else
-	  connect(win, SIGNAL(sceneGraphInitialized()), this, SLOT(onSceneGraphInitialized()), Qt::DirectConnection);
-
+    connect(win, SIGNAL(beforeSynchronizing()), this, SLOT(onBeforeSynchronizing()), Qt::DirectConnection);
     connect(win, SIGNAL(sceneGraphInvalidated()), this, SLOT(onSceneGraphInvalidated()), Qt::DirectConnection);
   } else {
     this->priv->qt_context = NULL;

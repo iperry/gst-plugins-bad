@@ -50,6 +50,7 @@ private Q_SLOTS:
     void handleWindowChanged(QQuickWindow * win);
     void onSceneGraphInitialized();
     void onSceneGraphInvalidated();
+    void onBeforeSynchronizing();
 
 protected:
     QSGNode * updatePaintNode (QSGNode * oldNode, UpdatePaintNodeData * updatePaintNodeData);
